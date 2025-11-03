@@ -1,0 +1,14 @@
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\bin\Debug\net8.0\task-tracker-cli.exe
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\bin\Debug\net8.0\task-tracker-cli.deps.json
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\bin\Debug\net8.0\task-tracker-cli.runtimeconfig.json
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\bin\Debug\net8.0\task-tracker-cli.dll
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\bin\Debug\net8.0\task-tracker-cli.pdb
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\task-tracker-cli.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\task-tracker-cli.AssemblyInfoInputs.cache
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\task-tracker-cli.AssemblyInfo.cs
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\task-tracker-cli.csproj.CoreCompileInputs.cache
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\task-tracker-cli.dll
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\refint\task-tracker-cli.dll
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\task-tracker-cli.pdb
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\task-tracker-cli.genruntimeconfig.cache
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\ref\task-tracker-cli.dll
