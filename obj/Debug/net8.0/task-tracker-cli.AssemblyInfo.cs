@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("task-tracker-cli")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bfaceb29d48b2a256e69a587c85569334b7ef050")]
 [assembly: System.Reflection.AssemblyProductAttribute("task-tracker-cli")]
 [assembly: System.Reflection.AssemblyTitleAttribute("task-tracker-cli")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

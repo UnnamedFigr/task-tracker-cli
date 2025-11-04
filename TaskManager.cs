@@ -15,7 +15,7 @@ namespace task_tracker_cli
 
     public class TaskManager
     {
-        private const string filePath = ".\\jsonFiles\\tasks.json";
+        private const string filePath = "..\\..\\..\\jsonFiles\\tasks.json";
         private int uniqueIdCounter = 1;
         private List<Task> taskList;
 
@@ -86,50 +86,61 @@ namespace task_tracker_cli
                 Console.WriteLine(ANE.Message);
             }
         }
-        private void CheckForId(int id)
+        private Task CheckForId(int id)
         {
-            Task? task = taskList.FirstOrDefault(x => x.Id == id);
+            Task task = taskList.FirstOrDefault(x => x.Id == id);
             try {
                 if(task != null)
                 {
-                    return;
+                    return task;
                 }
                 else
                 {
                     throw new IndexOutOfRangeException($"The task with index - {id} cannot found. Wrong index");
-                    
                 }
             } catch (IndexOutOfRangeException IOR)
             {
                 Console.WriteLine(IOR.Message);
             }
+            return null;
         }
         
-        public void UpdateTask(int id, string description, StatusEnum status)
+        public bool UpdateTask(int id, string description, StatusEnum status)
         {
-            if (description == null) return;
-            CheckForId(id);
-            Task selectedTask = taskList.FirstOrDefault(x => x.Id == id);
+            if (string.IsNullOrEmpty(description)) return false;
+            Task selectedTask = CheckForId(id);
+            if (selectedTask == null) return false;
             selectedTask.EditTask(description);
             selectedTask.SetStatus(status);
+
+            return true;
         }
-        public void UpdateTask(int id, StatusEnum status)
+        public bool UpdateTask(int id, StatusEnum status)
         {
-            CheckForId(id);
-            Task selectedTask = taskList.FirstOrDefault(x=> x.Id == id);
+            Task selectedTask = CheckForId(id);
+            if (selectedTask == null) return false;
             selectedTask.SetStatus(status);
+
+            return true;
         }
-        public void UpdateTask(int id, string description)
+        public bool UpdateTask(int id, string description)
         {
-            if (description == null) return;
-            CheckForId(id);
-            taskList.FirstOrDefault(x => x.Id == id).EditTask(description);
+            if (string.IsNullOrEmpty(description)) return false;
+            Task selectedTask = CheckForId(id);
+            if (selectedTask == null) return false; // Null check added
+            selectedTask.EditTask(description);
+
+            return true;
+            //Task selectedTask = taskList.FirstOrDefault(x => x.Id == id);
+            //selectedTask.EditTask(description);
         }
-        public void DeleteTask(int id)
+        public bool DeleteTask(int id)
         {
             CheckForId(id);
             Task tasktoRemove = taskList.FirstOrDefault(x => x.Id == id);
+            if (tasktoRemove == null) return false; // Null check added
             taskList.Remove(tasktoRemove);
+            return true;
         }
                 
         public IReadOnlyCollection<Task> GetAllTasks()
@@ -157,6 +168,11 @@ namespace task_tracker_cli
         }
         public void PrintAllTasks(StatusEnum status)
         {
+            if (taskList.Count == 0)
+            {
+                Console.WriteLine("Task list is empty");
+                return;
+            }
             Console.WriteLine("--- TASK LIST ---");
             Console.WriteLine($"--- WITH STATUS {status.ToString()} ---\n");
             foreach(var task in GetAllTasks(status))
@@ -166,7 +182,11 @@ namespace task_tracker_cli
         }
         public void PrintAllTasks()
         {
-            if (taskList == null) return;
+            if (taskList.Count == 0)
+            {
+                Console.WriteLine("Task list is empty");
+                return;
+            }  
             Console.WriteLine("--- TASK LIST ---\n");
             foreach (var task in taskList)
             {

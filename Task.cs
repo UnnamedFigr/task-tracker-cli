@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace task_tracker_cli
@@ -14,6 +15,7 @@ namespace task_tracker_cli
         private DateTime createdAt;
         private DateTime updatedAt;
 
+        [JsonConstructor]
         public Task(int id, string description)
         {
             this.Id = id;
@@ -50,18 +52,28 @@ namespace task_tracker_cli
             private set { updatedAt = value; }
         }
 
-        public void SetStatus(StatusEnum status) {
+        public bool SetStatus(StatusEnum status) {
             if(status == this.Status)
             {
                 Console.WriteLine("The task status is already marked");
+                return false;
             }
-            this.status = status;
-            this.updatedAt = DateTime.UtcNow;
+            this.Status = status;
+            this.UpdatedAt = DateTime.UtcNow;
+            Console.WriteLine("Task status updated successfully");
+            return true;
         }
-        public void EditTask(string description)
+        public bool EditTask(string description)
         {
-            this.description = description;
-            this.updatedAt = DateTime.UtcNow;
+            if(Description == description)
+            {
+                Console.WriteLine("Current description is the same.");
+                return false;
+            }
+            this.Description = description;
+            this.UpdatedAt = DateTime.UtcNow;
+            Console.WriteLine("Task description updated successfully");
+            return true;
         }
         public override string ToString()
         {
