@@ -1,6 +1,26 @@
 # task-tracker-cli
-🚀 C# Persistent CLI Task TrackerA console-based task management application built in C#, featuring object-oriented design principles, JSON persistence, and robust command handling.✨ FeaturesPersistent Storage: Tasks are automatically saved to and loaded from a local JSON file (tasks.json).Unique ID Generation: Uses an auto-incrementing integer ID mechanism to guarantee unique task identifiers across sessions.CRUD Operations: Supports creating, listing, updating (description/status), and deleting tasks.Status Management: Tasks can be explicitly marked as todo, inProgress, or done.Object-Oriented Design: Clear separation of concerns between Task entity, TaskManager (data logic/persistence), and InputHandler (CLI logic).🛠️ Prerequisites.NET SDK (6.0 or higher recommended)A C# IDE (Visual Studio, VS Code with C# extension, etc.)🏗️ Project StructureThe core functionality is distributed across three main classes:FileResponsibilityDetailsTask.csEntityDefines the Task object (ID, description, status, timestamps) and the StatusEnum.TaskManager.csData/Business LogicManages the List<Task>, handles auto-incrementing IDs, and implements JSON serialization/deserialization for persistence.InputHandler.csInterface LogicParses user input, extracts the command, ID, and value, and delegates actions to the TaskManager.Program.csApplication EntryInitializes the application loop and routes raw input to the InputHandler.⚙️ How to RunClone the Repository:Bashgit clone [Your-Repo-Link]
-cd task-tracker-cli
-Restore Dependencies:Bashdotnet restore
-Run the Application:Bashdotnet run
-The application will load tasks from tasks.json (if it exists) and immediately enter the command loop.🎯 Command ReferenceThe application uses a simple space-separated command structure.1. Simple Commands (Command Only)CommandDescriptionsaveManually saves the current task list to tasks.json.loadReloads the task list from tasks.json, overwriting the current in-memory data.listLists all tasks regardless of status.quit / exitExits the application (the Program.cs loop should handle calling tm.SaveTasks() before closing).2. Commands with Value (Command + Description/Filter)CommandUsage ExampleDescriptionaddadd Buy groceries for dinnerCreates a new task with the specified description.listlist doneFilters and prints tasks based on the provided status (todo, inProgress, done).3. Commands with ID (Command + ID)CommandUsage ExampleDescriptiondeletedelete 5Permanently removes the task with ID 5.mark-todomark-todo 1Sets the status of Task 1 to todo.mark-in-progressmark-in-progress 2Sets the status of Task 2 to inProgress.mark-donemark-done 3Sets the status of Task 3 to done.4. Commands with ID and Value (Command + ID + Description)CommandUsage ExampleDescriptionupdateupdate 4 Review pull requestEdits the description of Task 4 to the new string.💡 Notes for ContributorsError Handling: The InputHandler currently uses basic if/else checks for command structure. A more advanced solution would be to use a dedicated Command Pattern or a library like System.CommandLine for robust argument parsing.Id Counter Persistence: The TaskManager relies on saving and loading a separate NextTaskId property within the JSON structure to maintain the auto-incrementing sequence, which is crucial for persistence.File Path: The JSON file path is currently hardcoded in TaskManager.cs. For a production environment, this should be configurable via a settings file (e.g., appsettings.json) or environment variables.
+**🚀 C# Persistent CLI Task Tracker**\
+_A console-based task management application built in C#, featuring object-oriented design principles, JSON persistence, and robust command handling._
+
+ **✨ Features**  
+- Persistent Storage: Tasks are automatically saved to and loaded from a local JSON file (tasks.json).
+- Unique ID Generation: Uses an auto-incrementing integer ID mechanism to guarantee unique task identifiers across sessions.
+- CRUD Operations: Supports creating, listing, updating (description/status), and deleting tasks.
+- Status Management: Tasks can be explicitly marked as todo, inProgress, or done.
+- Object-Oriented Design: Clear separation of concerns between Task entity, TaskManager (data logic/persistence), and InputHandler (CLI logic).
+
+**🛠️ Prerequisites**
+- .NET SDK (6.0 or higher recommended)  
+- A C# IDE (Visual Studio, VS Code with C# extension, etc.)
+
+**How to use:**
+``` 
+  git clone https://github.com/UnnamedFigr/task-tracker-cli.git
+  cd task-tracker-cli
+```
+- To add a task
+```
+  add Buy groceries
+  add 1 apple to the bag
+
+```
