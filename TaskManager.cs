@@ -41,7 +41,7 @@ namespace task_tracker_cli
             {
                 string jsonStr = File.ReadAllText(filePath);
                 var dataContainer = JsonSerializer.Deserialize<TaskDataContainer>(jsonStr);
-                if (dataContainer.Tasks != null)
+                if (dataContainer?.Tasks != null)
                 {
                     taskList = dataContainer.Tasks;
                     uniqueIdCounter = dataContainer.NextTaskId;
@@ -52,9 +52,9 @@ namespace task_tracker_cli
                     Console.WriteLine($"\nNo tasks found from {filePath}.");
                 }
             }
-            catch (JsonException JE )
+            catch (JsonException JE)
             {
-                Console.WriteLine("JSON file is corrupted.");
+                Console.WriteLine("JSON file is corrupted. " + JE.Message);
                 taskList = new List<Task>();
                 uniqueIdCounter = 1;
             }
@@ -101,7 +101,7 @@ namespace task_tracker_cli
         }
         private Task CheckForId(int id)
         {
-            Task task = taskList.FirstOrDefault(x => x.Id == id);
+            Task? task = taskList.FirstOrDefault(x => x.Id == id);
             try {
                 if(task != null)
                 {
@@ -150,7 +150,7 @@ namespace task_tracker_cli
         public bool DeleteTask(int id)
         {
             CheckForId(id);
-            Task tasktoRemove = taskList.FirstOrDefault(x => x.Id == id);
+            Task? tasktoRemove = taskList.FirstOrDefault(x => x.Id == id);
             if (tasktoRemove == null) return false; // Null check added
             taskList.Remove(tasktoRemove);
             return true;

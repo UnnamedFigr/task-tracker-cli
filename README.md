@@ -22,5 +22,22 @@ _A console-based task management application built in C#, featuring object-orien
 ```
   add Buy groceries
   add 1 apple to the bag
-
+```
+- To remove a task 
+``` delete [task ID] 
+	delete all  \\ to delete all tasks
+```
+- See all tasks
+```
+	list
+```
+- See tasks with certain status
+``` list [status]
+	list todo
+	list inprogress
+	list done
+```
+- To exit 
+```
+	exit
 ```

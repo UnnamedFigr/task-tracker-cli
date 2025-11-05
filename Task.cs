@@ -10,7 +10,7 @@ namespace task_tracker_cli
     public class Task
     {
         private int id;
-        private string description;
+        private string? description;
         private StatusEnum status;
         private DateTime createdAt;
         private DateTime updatedAt;
@@ -27,7 +27,7 @@ namespace task_tracker_cli
 
         public string Description 
         {
-            get { return description; }
+            get { return description ?? ""; }
             private set { description = value; }
         }
 
