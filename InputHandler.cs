@@ -8,7 +8,7 @@ namespace task_tracker_cli
 {
     public class InputHandler
     {
-        private TaskManager tm = new TaskManager();
+        private ITaskManager tm;
         public string Text { get; private set; }
         public string[] Parts { get; private set; }
 
@@ -19,7 +19,8 @@ namespace task_tracker_cli
         public InputHandler()
         {
             // Optional: Load tasks at initialization
-            tm.LoadTasks();
+            ITaskRepository repository = new JsonTaskRepository();
+            tm = new TaskManager(repository);
         }
 
         private void SplitCommand(string input)
@@ -51,7 +52,7 @@ namespace task_tracker_cli
                 }
                 if (!int.TryParse(argString, out selectedTaskId) || selectedTaskId <= 0)
                 {
-                    selectedTaskId = 0;
+                    selectedTaskId = 0;                    
                 }
 
             }
@@ -91,15 +92,8 @@ namespace task_tracker_cli
             switch (command)
             {
                 case "quit":
-                    tm.SaveTasks();
-                    Console.WriteLine("Tasks saved automatically");
+                    Console.WriteLine("Thank you. Good bye!");
                     return false;
-                case "save":
-                    tm.SaveTasks(); // manually save tasks
-                    break;
-                case "load": // manually load tasks
-                    tm.LoadTasks();
-                    break;
                 case "add":
                     if (string.IsNullOrWhiteSpace(value))
                     {
@@ -120,13 +114,13 @@ namespace task_tracker_cli
                     if(value == "all")
                     {
                         tm.DeleteAllTasks();
+                        break;
                     }
                     if (selectedTaskId <= 0 && value != "all")
                     {
                         Console.WriteLine("Error: 'delete' requires a valid Task ID or \"all\" argument");
                         break;
-                    }
-                    
+                    }  
                     tm.DeleteTask(selectedTaskId);
                     break;
                 case "mark-in-progress":

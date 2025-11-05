@@ -15,15 +15,17 @@ namespace task_tracker_cli
         public int NextTaskId { get; set; } = 1; // default equals 1
     }
 
-    public class TaskManager
+    public class TaskManager : ITaskManager
     {
+        private ITaskRepository repository;
         string baseDir = AppContext.BaseDirectory;
         private string filePath; 
         private int uniqueIdCounter = 1;
         private List<Task> taskList;
 
-        public TaskManager()
+        public TaskManager(ITaskRepository repository)
         {
+            this.repository = repository;
             filePath = Path.Combine(baseDir, "..", "..", "..", "jsonFiles", "tasks.json");
             taskList = new List<Task>();
         }
@@ -63,7 +65,7 @@ namespace task_tracker_cli
                 uniqueIdCounter = 1;
             }
         }
-        public void SaveTasks()
+        public void SaveData()
         {
             try
             {
@@ -153,15 +155,15 @@ namespace task_tracker_cli
             taskList.Remove(tasktoRemove);
             return true;
         }
-        public bool DeleteAllTasks()
+        public void DeleteAllTasks()
         {
-            if (taskList.Any())
-            {
-                taskList.Clear();
-                return true;
-            }
-            return false;
-        }      
+            taskList.Clear();
+            uniqueIdCounter = 1; 
+
+            SaveData();
+
+            repository.Clear();
+        }
         public IReadOnlyCollection<Task> GetAllTasks()
         {
             if (taskList != null) return taskList.AsReadOnly();

@@ -13,7 +13,6 @@ namespace task_tracker_cli
         public void Run()
         {
             Console.WriteLine("Welcome to task tracker CLI\n");
-            TaskManager tm = new TaskManager();
             InputHandler inputHandler = new InputHandler();
             while (true)
             {
