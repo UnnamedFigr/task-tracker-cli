@@ -18,100 +18,153 @@ namespace task_tracker_cli
         private string value;
         public InputHandler()
         {
-            
+            // Optional: Load tasks at initialization
+            tm.LoadTasks();
         }
-        
+
         private void SplitCommand(string input)
         {
             if (string.IsNullOrEmpty(input))
             {
-                Console.Write("Unspecified command.\n");
+                throw new ArgumentException("Unspecified command. Please enter a command.");
             }
 
-            Parts = input.Split(new char[] { ' ' }, 3, StringSplitOptions.RemoveEmptyEntries);
+            Parts = input.Trim().Split(new char[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
 
             if (Parts.Length < 1)
             {
-                throw new ArgumentNullException("Incorrectly structured commands");
+                throw new ArgumentException("Incorrectly structured command.");
             }
 
-            command = Parts[0];
+            command = Parts[0].ToLowerInvariant();
+            string argString = Parts.Length > 1 ? Parts[1].Trim() : string.Empty;
+
             selectedTaskId = 0;
             value = "";
-            if (Parts.Length == 3)
-            {
-                if (int.TryParse(Parts[1], out selectedTaskId))
-                {
-                    if (!string.IsNullOrEmpty(Parts[2]))
-                    {
-                        value = Parts[2];
-                    }                
-                }
-            }
-            else if(Parts.Length == 2)
-            {
-                if (int.TryParse(Parts[1], out selectedTaskId))
-                {
-                    return;
-                }
-                value = Parts[1];
-                return;
-            }
-            else if(command == "list")
-            {
-                return; 
-            }
-                      
-        }
-        public void HandleCommand(string input)
-        {
-            Console.WriteLine();
 
-            SplitCommand(input);
-            
+            if (command == "delete" || command.StartsWith("mark-"))
+            {
+                if (argString.Trim() == "all")
+                {
+                    selectedTaskId = 0;
+                    value = "all";
+                }
+                if (!int.TryParse(argString, out selectedTaskId) || selectedTaskId <= 0)
+                {
+                    selectedTaskId = 0;
+                }
+
+            }
+
+            else if (command == "add" || command == "list")
+            {
+                value = argString;
+            }
+            else if (command == "update")
+            {
+                string[] updateParts = argString.Split(new char[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
+
+                if (updateParts.Length >= 2 && int.TryParse(updateParts[0], out selectedTaskId) && selectedTaskId > 0)
+                {
+                    value = updateParts[1].Trim();
+                }
+                else
+                {
+                    selectedTaskId = 0;
+                }
+            }
+        }
+
+        public bool HandleCommand(string input)
+        {
+            try
+            {
+                Console.WriteLine();
+                SplitCommand(input);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return true; // Keep running
+            }
+
             switch (command)
             {
-                case "save":
+                case "quit":
                     tm.SaveTasks();
+                    Console.WriteLine("Tasks saved automatically");
+                    return false;
+                case "save":
+                    tm.SaveTasks(); // manually save tasks
                     break;
-                case "load":
+                case "load": // manually load tasks
                     tm.LoadTasks();
                     break;
                 case "add":
+                    if (string.IsNullOrWhiteSpace(value))
+                    {
+                        Console.WriteLine("Error: 'add' command requires a description.");
+                        break;
+                    }
                     tm.AddTask(value);
                     break;
                 case "update":
+                    if (selectedTaskId <= 0 || string.IsNullOrWhiteSpace(value))
+                    {
+                        Console.WriteLine("Error: 'update' requires a valid Task ID and a new description. Usage: update <ID> <new description>");
+                        break;
+                    }
                     tm.UpdateTask(selectedTaskId, value);
                     break;
                 case "delete":
+                    if(value == "all")
+                    {
+                        tm.DeleteAllTasks();
+                    }
+                    if (selectedTaskId <= 0 && value != "all")
+                    {
+                        Console.WriteLine("Error: 'delete' requires a valid Task ID or \"all\" argument");
+                        break;
+                    }
+                    
                     tm.DeleteTask(selectedTaskId);
                     break;
                 case "mark-in-progress":
-                    tm.UpdateTask(selectedTaskId, StatusEnum.inProgress);
-                    break;
                 case "mark-done":
-                    tm.UpdateTask(selectedTaskId, StatusEnum.done);
-                    break;
                 case "mark-todo":
-                    tm.UpdateTask(selectedTaskId, StatusEnum.todo);
-                    break;
-                case "list":
-                    if (Enum.TryParse<StatusEnum>(value, ignoreCase: true, out StatusEnum res) && !string.IsNullOrEmpty(value))
-                    {                       
-                        tm.PrintAllTasks(res);
+                    if (selectedTaskId <= 0)
+                    {
+                        Console.WriteLine($"Error: '{command}' requires a valid Task ID.");
                         break;
                     }
-                    else if (string.IsNullOrEmpty(value) && Parts.Length == 1)
+                    // Extract status from command name
+                    StatusEnum status;
+                    if (command == "mark-in-progress") status = StatusEnum.inProgress;
+                    else if (command == "mark-done") status = StatusEnum.done;
+                    else status = StatusEnum.todo;
+
+                    tm.UpdateTask(selectedTaskId, status);
+                    break;
+                case "list":
+                    if (string.IsNullOrEmpty(value))
                     {
                         tm.PrintAllTasks();
-                        break;
+                    }
+                    else if (Enum.TryParse<StatusEnum>(value, ignoreCase: true, out StatusEnum res))
+                    {
+                        tm.PrintAllTasks(res);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: Cannot filter by status '{value}'. Use 'todo', 'inProgress', or 'done'.");
                     }
                     break;
                 default:
-                    Console.WriteLine("Could not recognise command");
+                    Console.WriteLine($"Could not recognise command: '{command}'");
                     break;
 
             }
+            return true;
         }
     }
 }

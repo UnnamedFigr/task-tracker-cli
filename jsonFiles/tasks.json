@@ -1,26 +1,4 @@
 {
-  "Tasks": [
-    {
-      "Description": "laina",
-      "Id": 1,
-      "Status": -1,
-      "CreatedAt": "2025-11-04T11:38:59.596977Z",
-      "UpdatedAt": "2025-11-04T11:38:59.5969772Z"
-    },
-    {
-      "Description": "drisnq",
-      "Id": 2,
-      "Status": -1,
-      "CreatedAt": "2025-11-04T11:39:05.9396411Z",
-      "UpdatedAt": "2025-11-04T11:39:05.9396413Z"
-    },
-    {
-      "Description": "govnovoz",
-      "Id": 3,
-      "Status": -1,
-      "CreatedAt": "2025-11-04T11:39:09.752292Z",
-      "UpdatedAt": "2025-11-04T11:39:09.7522923Z"
-    }
-  ],
-  "NextTaskId": 4
+  "Tasks": [],
+  "NextTaskId": 3
 }

@@ -12,3 +12,4 @@ C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\
 C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\task-tracker-cli.pdb
 C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\task-tracker-cli.genruntimeconfig.cache
 C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\ref\task-tracker-cli.dll
+C:\Users\kasap\Documents\programming-projects\task-tracker-cli\obj\Debug\net8.0\task-tracker-cli.sourcelink.json

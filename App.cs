@@ -19,7 +19,11 @@ namespace task_tracker_cli
             {
                 try
                 {
-                    inputHandler.HandleCommand(Console.ReadLine());
+                    if (!inputHandler.HandleCommand(Console.ReadLine()))
+                    {
+                        break;
+                    }
+                    
                 }
                 catch (ArgumentNullException ANE)
                 {

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace task_tracker_cli
@@ -15,12 +17,14 @@ namespace task_tracker_cli
 
     public class TaskManager
     {
-        private const string filePath = "..\\..\\..\\jsonFiles\\tasks.json";
+        string baseDir = AppContext.BaseDirectory;
+        private string filePath; 
         private int uniqueIdCounter = 1;
         private List<Task> taskList;
 
         public TaskManager()
         {
+            filePath = Path.Combine(baseDir, "..", "..", "..", "jsonFiles", "tasks.json");
             taskList = new List<Task>();
         }
         public void LoadTasks()
@@ -28,6 +32,7 @@ namespace task_tracker_cli
             if (!File.Exists(filePath))
             {
                 Console.WriteLine($"\nFile {filePath} not found. Starting with an empty task list.");
+                File.Create(filePath, 4096);
                 return;
             }
             try
@@ -42,12 +47,18 @@ namespace task_tracker_cli
                 }
                 else
                 {
-                    Console.WriteLine($"\nSuccessfully loaded {dataContainer.Tasks.Count} tasks from {filePath}.");
+                    Console.WriteLine($"\nNo tasks found from {filePath}.");
                 }
+            }
+            catch (JsonException JE )
+            {
+                Console.WriteLine("JSON file is corrupted.");
+                taskList = new List<Task>();
+                uniqueIdCounter = 1;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error loading tasks " + ex.Message);
+                Console.WriteLine("Error loading tasks " + ex.Message + ex.InnerException);
                 taskList = new List<Task>();
                 uniqueIdCounter = 1;
             }
@@ -142,7 +153,15 @@ namespace task_tracker_cli
             taskList.Remove(tasktoRemove);
             return true;
         }
-                
+        public bool DeleteAllTasks()
+        {
+            if (taskList.Any())
+            {
+                taskList.Clear();
+                return true;
+            }
+            return false;
+        }      
         public IReadOnlyCollection<Task> GetAllTasks()
         {
             if (taskList != null) return taskList.AsReadOnly();
